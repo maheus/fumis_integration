@@ -49,8 +49,8 @@ class Fumis:
     ) -> Optional[Dict[str, Union[bool, int, str]]]:
         """Handle a request to the Fumis WiRCU API."""
         url = URL.build(
-            #scheme="https", host="api.fumis.si", port=443, path="/v1/"
-            scheme="http", host="api.fumis.si", port=80, path="/v1/"
+            scheme="https", host="api.fumis.si", port=443, path="/v1/"
+            #scheme="http", host="api.fumis.si", port=80, path="/v1/"
         ).join(URL(uri))
 
         if self._loop is None:
