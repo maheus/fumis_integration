@@ -1,0 +1,17 @@
+# Describes the format for available virtual services
+
+set_power_stove:
+  description: Request for set stove power
+  target:
+    entity:
+      integration: fumis
+      domain: climate
+  fields:
+    power:
+      description: power to use (usually between 1 and 5)
+      example: 4
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 5
