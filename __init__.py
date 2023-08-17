@@ -5,7 +5,6 @@ import logging
 
 import voluptuous as vol
 import requests
-from .fumis import Fumis, FumisConnectionError
 
 from homeassistant.components.climate.const import PRESET_AWAY, PRESET_HOME
 from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
@@ -17,13 +16,18 @@ from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.util import Throttle
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from homeassistant.const import CONF_PASSWORD, CONF_NAME, CONF_MAC 
+from homeassistant.const import CONF_PASSWORD, CONF_NAME, CONF_MAC, Platform
 from .const import DOMAIN
+from .fumis import Fumis, FumisConnectionError
 
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = 'fumis'
 
+PLATFORMS = [
+    Platform.CLIMATE,
+    Platform.SENSOR,
+]
 
 FUMIS_COMPONENTS = ["climate", "sensor"]
 
@@ -66,11 +70,6 @@ async def async_setup(hass: HomeAssistant, config: dict):
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up this integration using UI."""
 
-    # if i want only ui conf -> remove entry conf with file
-    #if entry.source == SOURCE_IMPORT:
-    #    hass.async_create_task(hass.config_entries.async_remove(entry.entry_id))
-    #    return False
-
     _LOGGER.info("start fumis")
     mac = entry.data[CONF_MAC]
     password = entry.data[CONF_PASSWORD]
@@ -102,15 +101,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     return True
 
 
-async def async_unload_entry(hass, config_entry):
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    await asyncio.wait(
-        [
-            hass.config_entries.async_forward_entry_unload(config_entry, component)
-            for component in FUMIS_COMPONENTS
-        ]
-    )
-    hass.data[DOMAIN].pop(config_entry.entry_id)
-    if not hass.data[DOMAIN]:
+
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unload_ok:
         hass.data.pop(DOMAIN)
-    return True
+    return unload_ok

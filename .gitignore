@@ -1,2 +1,3 @@
 flask_api/
-fumis/
+__pycache__/
+fumis/__pycache__/

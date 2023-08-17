@@ -1,24 +1,16 @@
 """Platform for Roth Touchline floor heating controller."""
 import logging
 
-from .fumis import Fumis
-
-from homeassistant.helpers.entity import Entity
-
 from homeassistant.const import (
     ATTR_TEMPERATURE,
     ATTR_STATE,
-    CONCENTRATION_PARTS_PER_MILLION,
     DEVICE_CLASS_BATTERY,
     DEVICE_CLASS_TEMPERATURE,
-    DEVICE_CLASS_TIMESTAMP,
     DEVICE_CLASS_POWER,
     DEVICE_CLASS_CURRENT,
     POWER_KILO_WATT,
     TEMP_CELSIUS,
-    TEMP_FAHRENHEIT,
     PERCENTAGE,
-    ELECTRIC_POTENTIAL_VOLT,
     CONF_NAME,
     CONF_DEVICE_CLASS,
     CONF_ICON,
@@ -26,14 +18,17 @@ from homeassistant.const import (
     CONF_TYPE,
 )
 
-from homeassistant.const import CONF_HOST, CONF_MAC, CONF_PASSWORD
-import homeassistant.helpers.config_validation as cv
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import DeviceInfo
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.core import HomeAssistant
 
 from .const import (
     DOMAIN,
+    ATTR_POWER,
     ATTR_FUEL,
     ATTR_ACTUAL_POWER,
-    ATTR_CONSUM_POWER,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -45,15 +40,17 @@ SENSOR_TYPES = {
         CONF_DEVICE_CLASS: DEVICE_CLASS_TEMPERATURE,
         CONF_UNIT_OF_MEASUREMENT: TEMP_CELSIUS,
     },
-    ATTR_CONSUM_POWER: {
-        CONF_NAME: "Power Consumption",
-        CONF_TYPE: ATTR_CONSUM_POWER,
+    ATTR_POWER: {
+        CONF_NAME: "Power",
+        CONF_TYPE: ATTR_POWER,
         CONF_DEVICE_CLASS: DEVICE_CLASS_POWER,
         CONF_UNIT_OF_MEASUREMENT: POWER_KILO_WATT,
     },
     ATTR_ACTUAL_POWER: {
         CONF_NAME: "Actual Power",
         CONF_TYPE: ATTR_ACTUAL_POWER,
+        CONF_DEVICE_CLASS: DEVICE_CLASS_POWER,
+        CONF_UNIT_OF_MEASUREMENT: POWER_KILO_WATT,
     },
     ATTR_FUEL: {
         CONF_NAME: "Pellet Quantity",
@@ -68,24 +65,19 @@ SENSOR_TYPES = {
     },
 }
 
-
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    """Old way of setting up the fumis sensors.
-
-    Can only be called when a user accidentally mentions the platform in their
-    config. But even in that case it would have been ignored.
-    """
-
-
-async def async_setup_entry(hass, entry, async_add_entities):
+async def async_setup_entry(
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        async_add_entities: AddEntitiesCallback,
+    ) -> None:
     """Set up sensors from a config entry."""
     fumis = hass.data[DOMAIN][entry.entry_id]
     name = entry.data[CONF_NAME]
 
     sensors = [
               ATTR_TEMPERATURE,
+              ATTR_POWER,
               ATTR_ACTUAL_POWER,
-              ATTR_CONSUM_POWER,
               ATTR_FUEL,
               ATTR_STATE,
               ]
@@ -103,6 +95,8 @@ class FumisSensor(Entity):
         self._name = name
         self._sensor = SENSOR_TYPES[sensor]
         self._state = {}
+        self.info = None
+        self._unit_id = None
 
     @property
     def unique_id(self):
@@ -135,10 +129,21 @@ class FumisSensor(Entity):
         return self._sensor.get(CONF_UNIT_OF_MEASUREMENT)
 
     async def async_update(self):
+        """Async update."""
         self.info = await self.fumis.update_info()
         self._unit_id = self.info.unit_id
         self._state.update({ATTR_TEMPERATURE: self.info.temperature})
+        self._state.update({ATTR_POWER: self.info.kw})
         self._state.update({ATTR_ACTUAL_POWER: self.info.actualpower})
-        self._state.update({ATTR_CONSUM_POWER: self.info.kw})
         self._state.update({ATTR_FUEL: self.info.fuel_quantity})
         self._state.update({ATTR_STATE: self.info.status})
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information for this sensor."""
+        return DeviceInfo(
+            identifiers={
+                (DOMAIN, self._unit_id)
+            },
+            name=self._name,
+        )

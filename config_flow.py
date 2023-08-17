@@ -1,13 +1,12 @@
-from homeassistant import data_entry_flow, config_entries
+"""Config flow to configure fumis."""
 import logging
+from homeassistant import config_entries
 import voluptuous as vol
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from homeassistant.const import (
     CONF_PASSWORD,
     CONF_NAME,
     CONF_MAC,
-    CONF_NAME,
 )
 
 from .const import (
@@ -17,22 +16,32 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-
 #@config_entries.HANDLERS.register(DOMAIN)
 class FumisConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    """fumis config flow."""
+
+    def __init__(self) -> None:
+        """Initialize the fumis flow."""
+        self.mac = None
+        self.password = None
+        self.name = None
 
     async def async_step_user(self, user_input=None):
+        """Handle a flow initiated by the user."""
         _LOGGER.info("start fumis")
         errors = {}
         if user_input is not None:
-            mac = user_input[CONF_MAC]
-            password = user_input[CONF_PASSWORD]
-            name =  user_input[CONF_NAME]
-            await self.async_set_unique_id(mac)
+            self.mac = user_input[CONF_MAC].upper()
+            self.password = user_input[CONF_PASSWORD]
+            self.name =  user_input[CONF_NAME]
+            await self.async_set_unique_id(self.mac)
             self._abort_if_unique_id_configured()
 
             return self.async_create_entry(
-                title=name, data={CONF_MAC: mac, CONF_PASSWORD: password, CONF_NAME: name},
+                title=self.name, data={
+                    CONF_MAC: self.mac,
+                    CONF_PASSWORD: self.password,
+                    CONF_NAME: self.name},
             )
 
         # Specify items in the order they are to be displayed in the UI
@@ -50,17 +59,20 @@ class FumisConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Import a config entry.
 
         """
-        self.mac = user_input[CONF_MAC]
+        self.mac = user_input[CONF_MAC].upper()
         self.password = user_input[CONF_PASSWORD]
         if not self.mac or not self.password:
             return await self.async_step_user(user_input)
 
-        await self.async_set_unique_id(mac)
+        await self.async_set_unique_id(self.mac)
         self._abort_if_unique_id_configured()
 
         if CONF_NAME in user_input:
             self.name = user_input[CONF_NAME]
 
         return self.async_create_entry(
-            title=name, data={CONF_MAC: mac, CONF_PASSWORD: password, CONF_NAME: name},
+            title=self.name,data={
+                CONF_MAC: self.mac,
+                CONF_PASSWORD: self.password,
+                CONF_NAME: self.name},
         )

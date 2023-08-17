@@ -38,7 +38,6 @@ class Info:
     timers: list
     kw: float
     actualpower: float
-    setpower: int
 
 
     @staticmethod
@@ -65,14 +64,25 @@ class Info:
         else:
             signal_strength = 2 * (rssi + 100)
 
+        if fuel.get("quantity", "Unknown") == None:
+            fuel_quantity = (float(0))
+        else:
+            fuel_quantity = (float(fuel.get("quantity", "Unknown")) * 100)
+
         status_id = controller.get("status", -1)
         status = STATUS_MAPPING.get(status_id, STATUS_UNKNOWN)
 
         state_id = controller.get("command", -1)
         state = STATE_MAPPING.get(state_id, STATE_UNKNOWN)
 
-        ecomode_id = ecoMode.get("ecoModeEnable", -1)
+        ecomode_id = ecoMode.get("ecoModeEnable", 0)
+        if ecomode_id is None:
+            ecomode_id = 0
         ecomode_state = ECO_MAPPING.get(ecomode_id, STATE_UNKNOWN)
+
+        ecomode_type = ecoMode.get("ecoModeSetType", -1)
+        if ecomode_type is None:
+            ecomode_type = -1
 
         return Info(
             controller_version=controller.get("version", "Unknown"),
@@ -87,17 +97,16 @@ class Info:
             state=state,
             status_id=status_id,
             status=status,
-            actualpower=float(power.get("actualPower", 0)),
-            kw=float(power.get("kw", 0)),
-            setpower=int(power.get("setPower", 0)),
+            kw=float(power.get("actualPower", 0)),
+            actualpower=float(power.get("kw", 0)),
             target_temperature=temperature.get("set", 0),
             temperature=temperature.get("actual", 0),
             unit_id=unit.get("id", "Unknown"),
             unit_version=unit.get("version", "Unknown"),
             uptime=int(stats.get("uptime", 0)),
             fuel_quality=int(fuel.get("quality", "Unknown")),
-            fuel_quantity=(float(fuel.get("quantity", "Unknown")) * 100),
-            ecomode_type=int(ecoMode.get("ecoModeSetType", "Unknown")),
+            fuel_quantity=fuel_quantity,
+            ecomode_type=int(ecomode_type),
             ecomode_state=ecomode_state,
             timers=timers,
         )

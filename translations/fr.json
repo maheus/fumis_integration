@@ -1,0 +1,24 @@
+{
+  "title": "Intégration Fumis",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ajoutez votre poêle fumis",
+        "data": {
+          "name": "nom de votre poêle",
+          "mac": "adresse mac",
+          "password": "mot de passe de votre poêle"
+        }
+      }
+    },
+    "error": {
+      "resolve_failed": "Ce nom de domaine n'est pas résolu",
+      "connection_timeout": "Timeout lors de la connection à ce domaine",
+      "connection_refused": "Connection refusé lors de la connection à ce domaine"
+    },
+    "abort": {
+      "already_configured": "La combinaison de de domaine et ce port est déjà configuré",
+      "import_failed": "L'import de la configuration a échoué"
+    }
+  }
+}
