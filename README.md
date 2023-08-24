@@ -1,7 +1,10 @@
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+[![hacs_badge](https://github.com/maheus/fumis_integration/actions/workflows/hassfest.yaml/badge.svg)](https://github.com/maheus/fumis_integration/actions/)
 # Fumis integration for Home Assistant
 
 This a _custom component_ for [Home Assistant](https://www.home-assistant.io/).
-This integration using modified lib https://github.com/frenck/python-fumis.
+
+This integration using modified lib [python-fumis](https://github.com/frenck/python-fumis).
 
 The Fumis integration allows you to control and get information the stoves who used the api fumis (https://api.fumis.si).
 
@@ -21,10 +24,10 @@ Adding integration with HA ui (configuration -> integrations -> add integration 
 ## Contributors
 
 For a full list of all authors and contributors,
-check [the contributor's page][contributors].
+check [the contributor's page](https://github.com/maheus/fumis_integration/graphs/contributors).
 
 ### Thanks to:
-@Aohzan: for your help and disponibility
+[@Aohzan](https://github.com/Aohzan): for your help and disponibility
 
 ## Licence
 MIT License
