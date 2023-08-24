@@ -1,2 +1,2 @@
 flask_api/
-*__pycache__/*
+__pycache__
