@@ -20,5 +20,14 @@
       "already_configured": "La combinaison de de domaine et ce port est déjà configuré",
       "import_failed": "L'import de la configuration a échoué"
     }
+  },
+  "services": {
+    "name": "Change la puissance du poêle",
+    "description": "Requête pour changer la puissance du poêle",
+    "fields": {
+      "power": {
+        "description": "puissance a utiliser (généralement entre 1 et 5)"
+      }
+    }
   }
 }

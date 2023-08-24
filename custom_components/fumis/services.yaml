@@ -1,6 +1,6 @@
 # Describes the format for available virtual services
-
 set_power_stove:
+  name: Set stove power
   description: Request for set stove power
   target:
     entity:
