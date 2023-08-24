@@ -1,14 +1,20 @@
+2.0.2
+-----
+
+- prepare to use hacs
+- fix codeowners
+
 2.0.0
 -----
 
-refactor
+- refactor
 
 1.1.0
 -----
 
-Add Service set_power_stove
+- Add Service set_power_stove
 
 1.0.0
 -----
 
-Init
+- Init

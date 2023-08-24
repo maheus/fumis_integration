@@ -1,7 +1,7 @@
 {
   "domain": "fumis",
   "name": "Fumis",
-  "codeowners": ["@mlehoux"],
+  "codeowners": ["@maheus"],
   "config_flow": true,
   "dependencies": [ "http" ],
   "documentation": "https://github.com/maheus/fumis_integration/",
