@@ -22,11 +22,13 @@
     }
   },
   "services": {
-    "name": "Set stove power",
-    "description": "Request for set stove power",
-    "fields": {
-      "power": {
-        "description": "power to use (usually between 1 and 5)"
+    "set_power_stove": {
+      "name": "Set stove power",
+      "description": "Request for set stove power",
+      "fields": {
+        "power": {
+          "description": "power to use (usually between 1 and 5)"
+        }
       }
     }
   }

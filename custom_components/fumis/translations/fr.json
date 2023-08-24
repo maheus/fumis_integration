@@ -22,11 +22,13 @@
     }
   },
   "services": {
-    "name": "Change la puissance du poêle",
-    "description": "Requête pour changer la puissance du poêle",
-    "fields": {
-      "power": {
-        "description": "puissance a utiliser (généralement entre 1 et 5)"
+    "set_power_stove": {
+      "name": "Change la puissance du poêle",
+      "description": "Requête pour changer la puissance du poêle",
+      "fields": {
+        "power": {
+          "description": "puissance a utiliser (généralement entre 1 et 5)"
+        }
       }
     }
   }
