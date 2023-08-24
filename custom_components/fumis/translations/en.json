@@ -27,6 +27,7 @@
       "description": "Request for set stove power",
       "fields": {
         "power": {
+          "name": "power to use",
           "description": "power to use (usually between 1 and 5)"
         }
       }

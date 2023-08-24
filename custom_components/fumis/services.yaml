@@ -8,7 +8,8 @@ set_power_stove:
       domain: climate
   fields:
     power:
-      description: power to use (usually between 1 and 5)
+      name: Power to use
+      description: Power to use (usually between 1 and 5)
       example: 4
       required: true
       selector:

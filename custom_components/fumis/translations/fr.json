@@ -27,6 +27,7 @@
       "description": "Requête pour changer la puissance du poêle",
       "fields": {
         "power": {
+          "name": "puissance a utiliser",
           "description": "puissance a utiliser (généralement entre 1 et 5)"
         }
       }
