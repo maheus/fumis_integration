@@ -1,3 +1,8 @@
+2.1.0
+-----
+
+- add service set_power_stove (remove after refactor)
+
 2.0.3
 -----
 
@@ -12,13 +17,3 @@
 -----
 
 - refactor
-
-1.1.0
------
-
-- Add Service set_power_stove
-
-1.0.0
------
-
-- Init

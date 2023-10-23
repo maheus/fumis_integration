@@ -84,6 +84,8 @@ HA_HVAC_TO_FUMIS = {
     HVAC_MODE_HEAT: "on",
 }
 
+FUMIS_SET_POWER_STOVE = "set_power_stove"
+
 async def async_setup_entry(
         hass: HomeAssistant,
         entry: ConfigEntry,
@@ -98,6 +100,11 @@ async def async_setup_entry(
         print('errors')
     else:
         async_add_entities([FumisClimate(fumis, name)], True)
+        platform.async_register_entity_service(
+        FUMIS_SET_POWER_STOVE,
+            {vol.Required("power"): cv.positive_int},
+            "set_power_stove",
+        )
 
 class FumisClimate(ClimateEntity):
     """Representation of an Fumis sensor."""
@@ -112,7 +119,6 @@ class FumisClimate(ClimateEntity):
         self._temperature = None
         self._target_temperature = None
         self._ecomode_state = None
-
 
     @property
     def name(self):
@@ -228,3 +234,7 @@ class FumisClimate(ClimateEntity):
     async def async_turn_off(self):
         """Turn device off."""
         await self.fumis.turn_off()
+
+    async def set_power_stove(self, power) -> None:
+        """Set the power value."""
+        await self.fumis.set_power(power)
