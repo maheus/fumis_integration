@@ -1,5 +1,6 @@
 """Platform for Roth Touchline floor heating controller."""
 import logging
+import voluptuous as vol
 
 from homeassistant.components.climate import ClimateEntity
 
@@ -24,6 +25,7 @@ from homeassistant.const import (
 )
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers import entity_platform, config_validation as cv
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.core import HomeAssistant
@@ -93,15 +95,16 @@ async def async_setup_entry(
     ) -> None:
     """Set up a climate from a config entry."""
 
-    fumis = hass.data[DOMAIN][entry.entry_id]
-    name = entry.data[CONF_NAME]
+    fumis    = hass.data[DOMAIN][entry.entry_id]
+    name     = entry.data[CONF_NAME]
+    platform = entity_platform.async_get_current_platform()
 
     if fumis is None:
         print('errors')
     else:
         async_add_entities([FumisClimate(fumis, name)], True)
         platform.async_register_entity_service(
-        FUMIS_SET_POWER_STOVE,
+            FUMIS_SET_POWER_STOVE,
             {vol.Required("power"): cv.positive_int},
             "set_power_stove",
         )
@@ -119,6 +122,7 @@ class FumisClimate(ClimateEntity):
         self._temperature = None
         self._target_temperature = None
         self._ecomode_state = None
+
 
     @property
     def name(self):
