@@ -2,6 +2,7 @@
 -----
 
 - add service set_power_stove (remove after refactor)
+- remove main branch in HACS
 
 2.0.3
 -----
