@@ -143,6 +143,12 @@ class Fumis:
             {"ecoMode":{"ecoModeEnable": mode}}
         )
 
+    async def set_power(self, power: int) -> None:
+        """Set power of Fumis WiRCU device."""
+        await self._send_command(
+            {"power": {"setPower": power}}
+        )
+
     async def close(self) -> None:
         """Close open client session."""
         if self._session and self._close_session:
