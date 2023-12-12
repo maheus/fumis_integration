@@ -21,6 +21,14 @@ Copy `custom_components/fumis` in `config/custom_components` of your Home Assist
 
 Adding integration with HA ui (configuration -> integrations -> add integration -> search fumis).
 
+## known problems
+
+For one HETA green 200, if you deactivate the ecomode, then you must activate the possibility of accessing this menu.
+For reactivating this:
+```
+curl -d '{"unit": {"id": "YOUR_MAC", "type": 0, "pin": "YOUR_PASSWORD"},"controller": {"diagnostic": {"parameters": [{"id": 53, "value": 1}]}} ,"apiVersion": "1"}' -H  "Accept: application/json" -H 'appname: mtest' -H 'User-Agent: mtest' -H 'username: YOUR_MAC' -H 'password: YOUR_PASSWORD'  -X POST 'https://api.fumis.si/v1/status/'
+```
+
 ## Contributors
 
 For a full list of all authors and contributors,
