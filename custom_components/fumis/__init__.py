@@ -27,9 +27,10 @@ DOMAIN = 'fumis'
 PLATFORMS = [
     Platform.CLIMATE,
     Platform.SENSOR,
+    Platform.BINARY_SENSOR,
 ]
 
-FUMIS_COMPONENTS = ["climate", "sensor"]
+FUMIS_COMPONENTS = ["climate", "sensor", "binary_sensor"]
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=10)
 SCAN_INTERVAL = timedelta(seconds=15)
@@ -70,7 +71,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up this integration using UI."""
 
-    _LOGGER.info("start fumis")
+    _LOGGER.info("set up fumis with ui")
     mac = entry.data[CONF_MAC]
     password = entry.data[CONF_PASSWORD]
     if CONF_NAME in entry.data:
