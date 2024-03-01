@@ -1,3 +1,13 @@
+3.0.0
+----
+
+- rename stove state to stove status
+- move stove state to binary sensor
+- add stove current state sensor
+- init using SensorEntity,BinarySensorEntity and SensorDeviceClass
+# Breaking change
+- fix bug unique ID
+
 2.1.1
 -----
 

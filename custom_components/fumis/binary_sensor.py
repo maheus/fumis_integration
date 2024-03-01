@@ -66,12 +66,12 @@ class FumisBinarySensor(Entity):
     @property
     def unique_id(self):
         """Return a unique ID."""
-        return f"{self._unit_id}-{self._sensor}"
+        return f"{self._unit_id}-{self._sensor.get(CONF_TYPE)}"
 
     @property
     def name(self):
         """Return the name of the sensor."""
-        return f"{self._name} {self._sensor[CONF_NAME]}"
+        return f"{self._name} {self._sensor.get(CONF_NAME)}"
 
     @property
     def state(self):
@@ -98,7 +98,7 @@ class FumisBinarySensor(Entity):
         self.info = await self.fumis.update_info()
         self._unit_id = self.info.unit_id
         self._state = getattr(self.info, self._sensor.get(CONF_TYPE))
-        _LOGGER.debug(f"Export sensor info for {self._name}. name: {self._sensor['name']} value: {self._state}")
+        _LOGGER.debug(f"Export sensor info for {self._name}. name: {self._sensor.get(CONF_NAME)} value: {self._state}")
 
     @property
     def device_info(self) -> DeviceInfo:

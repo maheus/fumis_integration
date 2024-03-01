@@ -91,8 +91,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.error("Fumis update failed")
         return False
 
-    if not fumis:
-        return False
+    #await async_migrate_unique_id(hass, entry, fumis)
+
     hass.data.setdefault(DOMAIN, {}).update({entry.entry_id: fumis})
     for component in FUMIS_COMPONENTS:
         hass.async_create_task(
