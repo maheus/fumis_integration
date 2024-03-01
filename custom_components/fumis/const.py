@@ -1,9 +1,10 @@
 """Constants for the fumis integration."""
 DOMAIN = "fumis"
-ATTR_POWER = "power"
-ATTR_ACTUAL_POWER = "actual_power"
-ATTR_CONSUM_POWER = "kw"
-ATTR_FUEL = "pellet_qty"
+ATTR_POWER = "kw"
+ATTR_STATUS = "status"
+ATTR_ACTUAL_POWER = "actualpower"
+#ATTR_CONSUM_POWER = "kw"
+ATTR_FUEL = "fuel_quantity"
 
 MANUFACTURER = "fumis"
 
