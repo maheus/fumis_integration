@@ -1,4 +1,4 @@
-"""Platform for Roth Touchline floor heating controller."""
+"""Platform for Fumis heating controller."""
 import logging
 import voluptuous as vol
 
@@ -6,22 +6,18 @@ from homeassistant.components.climate import ClimateEntity
 
 from homeassistant.components.climate.const import (
     ATTR_CURRENT_TEMPERATURE,
-    HVAC_MODE_OFF,
-    HVAC_MODE_HEAT,
-    HVAC_MODE_COOL,
+    ClimateEntityFeature,
+    HVACMode,
+    HVACAction,
     PRESET_NONE,
-    PRESET_ECO,
-    SUPPORT_PRESET_MODE,
-    SUPPORT_TARGET_TEMPERATURE,
-    CURRENT_HVAC_OFF,
-    CURRENT_HVAC_HEAT,
-    CURRENT_HVAC_COOL,
+    PRESET_ECO
 )
 
 from homeassistant.const import (
     ATTR_TEMPERATURE,
     CONF_NAME,
-    TEMP_CELSIUS,
+    UnitOfPower,
+    UnitOfTemperature
 )
 
 from homeassistant.config_entries import ConfigEntry
@@ -47,8 +43,11 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_PRESET_MODE
-HVAC_MODES = [HVAC_MODE_OFF, HVAC_MODE_HEAT]
+SUPPORT_FLAGS = (ClimateEntityFeature.TARGET_TEMPERATURE
+                | ClimateEntityFeature.PRESET_MODE
+                | ClimateEntityFeature.TURN_ON
+                | ClimateEntityFeature.TURN_OFF)
+HVAC_MODES = [HVACMode.OFF, HVACMode.HEAT]
 PRESET_MODES = [PRESET_NONE, PRESET_ECO]
 
 HA_PRESET_TO_FUMIS = {
@@ -62,28 +61,28 @@ FUMIS_PRESET_TO_HA = {
 }
 
 FUMIS_HVAC_TO_HA = {
-    STATUS_OFF: HVAC_MODE_OFF,
-    STATUS_PRE_HEATING: HVAC_MODE_HEAT,
-    STATUS_IGNITION: HVAC_MODE_HEAT,
-    STATUS_COMBUSTION: HVAC_MODE_HEAT,
-    STATUS_ECO: HVAC_MODE_HEAT,
-    STATUS_COOLING: HVAC_MODE_COOL,
-    STATUS_UNKNOWN: HVAC_MODE_OFF,
+    STATUS_OFF: HVACMode.OFF,
+    STATUS_PRE_HEATING: HVACMode.HEAT,
+    STATUS_IGNITION: HVACMode.HEAT,
+    STATUS_COMBUSTION: HVACMode.HEAT,
+    STATUS_ECO: HVACMode.HEAT,
+    STATUS_COOLING: HVACMode.COOL,
+    STATUS_UNKNOWN: HVACMode.OFF,
 }
 
 FUMIS_CURRENT_HVAC_TO_HA = {
-    STATUS_OFF: CURRENT_HVAC_OFF,
-    STATUS_PRE_HEATING: CURRENT_HVAC_HEAT,
-    STATUS_IGNITION: CURRENT_HVAC_HEAT,
-    STATUS_COMBUSTION: CURRENT_HVAC_HEAT,
-    STATUS_ECO: CURRENT_HVAC_HEAT,
-    STATUS_COOLING: CURRENT_HVAC_COOL,
-    STATUS_UNKNOWN: CURRENT_HVAC_OFF,
+    STATUS_OFF: HVACAction.OFF,
+    STATUS_PRE_HEATING: HVACAction.HEATING,
+    STATUS_IGNITION: HVACAction.HEATING,
+    STATUS_COMBUSTION: HVACAction.HEATING,
+    STATUS_ECO: HVACAction.HEATING,
+    STATUS_COOLING: HVACAction.COOLING,
+    STATUS_UNKNOWN: HVACAction.OFF,
 }
 
 HA_HVAC_TO_FUMIS = {
-    HVAC_MODE_OFF: "off",
-    HVAC_MODE_HEAT: "on",
+    HVACMode.OFF: "off",
+    HVACMode.HEAT: "on",
 }
 
 FUMIS_SET_POWER_STOVE = "set_power_stove"
@@ -122,7 +121,9 @@ class FumisClimate(ClimateEntity):
         self._temperature = None
         self._target_temperature = None
         self._ecomode_state = None
-
+        self._attr_supported_features = SUPPORT_FLAGS
+        self._attr_hvac_modes = HVAC_MODES
+        self._enable_turn_on_off_backwards_compatibility = False
 
     @property
     def name(self):
@@ -177,11 +178,6 @@ class FumisClimate(ClimateEntity):
             await self.fumis.turn_off()
 
     @property
-    def supported_features(self):
-        """Return the list of supported features."""
-        return SUPPORT_FLAGS
-
-    @property
     def preset_mode(self):
         """Return the preset_mode."""
         return FUMIS_PRESET_TO_HA[self._ecomode_state]
@@ -210,7 +206,7 @@ class FumisClimate(ClimateEntity):
     @property
     def temperature_unit(self):
         """Return the unit of measurement which this thermostat uses."""
-        return TEMP_CELSIUS
+        return UnitOfTemperature.CELSIUS
 
     @property
     def current_temperature(self):
