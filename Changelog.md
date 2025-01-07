@@ -1,3 +1,8 @@
+3.0.1
+----
+
+- fix non async call async_forward_entry_setup
+
 3.0.0
 ----
 
