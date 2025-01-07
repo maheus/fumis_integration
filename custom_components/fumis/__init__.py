@@ -94,8 +94,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     #await async_migrate_unique_id(hass, entry, fumis)
 
     hass.data.setdefault(DOMAIN, {}).update({entry.entry_id: fumis})
-    for component in FUMIS_COMPONENTS:
-        await hass.config_entries.async_forward_entry_setups(entry, component)
+    await hass.config_entries.async_forward_entry_setups(entry, FUMIS_COMPONENTS)
 
     return True
 
