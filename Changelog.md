@@ -1,3 +1,8 @@
+3.0.2
+----
+
+- add default value for config flow
+
 3.0.1
 ----
 
