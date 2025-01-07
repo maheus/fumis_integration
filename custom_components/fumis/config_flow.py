@@ -46,9 +46,17 @@ class FumisConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         # Specify items in the order they are to be displayed in the UI
         data_schema = {
-            vol.Optional(CONF_NAME): str,
-            vol.Required(CONF_MAC): str,
-            vol.Required(CONF_PASSWORD): str,
+            vol.Optional(
+                CONF_NAME,
+                description={"suggested_value": "fumis"}
+                ): str,
+            vol.Required(
+                CONF_MAC,
+                default="000000000000"
+                ): str,
+            vol.Required(
+                CONF_PASSWORD,
+                ): str,
         }
 
         return self.async_show_form(
