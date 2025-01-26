@@ -32,14 +32,21 @@ from .const import (
     ATTR_POWER,
     ATTR_FUEL,
     ATTR_ACTUAL_POWER,
+    ATTR_COMBUSTION_CHAMBER_TEMPERATURE,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPES = {
     ATTR_TEMPERATURE: {
-        CONF_NAME: "Inside Temperature",
+        CONF_NAME: "Room Temperature",
         CONF_TYPE: ATTR_TEMPERATURE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
+        CONF_UNIT_OF_MEASUREMENT: UnitOfTemperature.CELSIUS,
+    },
+    ATTR_COMBUSTION_CHAMBER_TEMPERATURE: {
+        CONF_NAME: "Combustion chamber Temperature",
+        CONF_TYPE: ATTR_COMBUSTION_CHAMBER_TEMPERATURE,
         CONF_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
         CONF_UNIT_OF_MEASUREMENT: UnitOfTemperature.CELSIUS,
     },
@@ -80,6 +87,7 @@ async def async_setup_entry(
 
     sensors = [
               ATTR_TEMPERATURE,
+              ATTR_COMBUSTION_CHAMBER_TEMPERATURE,
               ATTR_POWER,
               ATTR_ACTUAL_POWER,
               ATTR_FUEL,

@@ -1,3 +1,8 @@
+3.1.0
+----
+
+- add stove combustion chamber temperature
+
 3.0.2
 ----
 

@@ -2,7 +2,7 @@
 
 import attr
 
-from .const import STATE_MAPPING, STATE_UNKNOWN, STATUS_MAPPING, STATUS_UNKNOWN, STOVE_ID, ECO_MAPPING
+from .const import STATE_MAPPING, STATE_UNKNOWN, STATUS_MAPPING, STATUS_UNKNOWN, ECO_MAPPING
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -25,6 +25,7 @@ class Info:
 
     temperature: float
     target_temperature: float
+    combustion_chamber_temperature: float
 
     heating_time: int
     igniter_starts: int
@@ -49,10 +50,10 @@ class Info:
         stats = controller.get("statistic", {})
         temperatures = controller.get("temperatures", {})
         power = controller.get("power", {})
-        #temperature = temperatures[0] if temperatures else {}
-        temperature = [d for d in temperatures if d['id'] == STOVE_ID][0]
+        temperature = [d for d in temperatures if d['id'] == 1][0]
+        combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
         fuels = controller.get("fuels", [])
-        fuel = [d for d in fuels if d['id'] == STOVE_ID][0]
+        fuel = [d for d in fuels if d['id'] == 1][0]
         ecoMode = controller.get("ecoMode", {})
         timers = controller.get("timers", [])
 
@@ -101,6 +102,7 @@ class Info:
             actualpower=float(power.get("kw", 0)),
             target_temperature=temperature.get("set", 0),
             temperature=temperature.get("actual", 0),
+            combustion_chamber_temperature=combustion_chamber_temperature.get("actual", 0),
             unit_id=unit.get("id", "Unknown"),
             unit_version=unit.get("version", "Unknown"),
             uptime=int(stats.get("uptime", 0)),

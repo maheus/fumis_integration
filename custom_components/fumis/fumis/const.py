@@ -8,7 +8,6 @@ STATUS_COMBUSTION = "combustion"
 STATUS_ECO = "eco"
 STATUS_COOLING = "cooling"
 STATUS_UNKNOWN = "unknown"
-STOVE_ID = 1
 
 STATUS_MAPPING = {
     0: STATUS_OFF,
