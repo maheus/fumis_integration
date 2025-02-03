@@ -1,3 +1,9 @@
+3.2.0
+
+- add air pressure sensor
+- add rpm sensor
+- add stove status if stove is an hybrid stove
+
 3.1.0
 ----
 
