@@ -50,6 +50,11 @@ class Info:
         stats = controller.get("statistic", {})
         temperatures = controller.get("temperatures", {})
         power = controller.get("power", {})
+        variables = controller.get("variables", {})
+        pressure = [d for d in variables if d['id'] == 34][0]
+        rpm = [d for d in variables if d['id'] == 35][0]
+        combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
+        hybrid = controller.get("hybrid", {})
         temperature = [d for d in temperatures if d['id'] == 1][0]
         combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
         fuels = controller.get("fuels", [])
@@ -110,5 +115,7 @@ class Info:
             fuel_quantity=fuel_quantity,
             ecomode_type=int(ecomode_type),
             ecomode_state=ecomode_state,
+            pressure=pressure.get("value", 0),,
+            rpm=rpm.get("value", 0),
             timers=timers,
         )

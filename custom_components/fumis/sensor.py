@@ -11,7 +11,7 @@ from homeassistant.const import (
     CONF_UNIT_OF_MEASUREMENT,
     CONF_TYPE,
     UnitOfPower,
-    UnitOfTemperature
+    UnitOfTemperature,
 )
 
 from homeassistant.components.sensor import (
@@ -74,6 +74,18 @@ SENSOR_TYPES = {
         CONF_DEVICE_CLASS: SensorDeviceClass.ENUM,
         CONF_UNIT_OF_MEASUREMENT: None,
     },
+    PRESSURE: {
+        CONF_NAME: "Pressure",
+        CONF_TYPE: PRESSURE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.PRESSURE,
+        CONF_UNIT_OF_MEASUREMENT: None,
+    },
+    REVOLUTIONS_PER_MINUTE: {
+        CONF_NAME: "Fan Speed",
+        CONF_TYPE: REVOLUTIONS_PER_MINUTE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.SPEED,
+        CONF_UNIT_OF_MEASUREMENT: None,
+    },
 }
 
 async def async_setup_entry(
@@ -92,6 +104,8 @@ async def async_setup_entry(
               ATTR_ACTUAL_POWER,
               ATTR_FUEL,
               ATTR_STATE,
+              PRESSURE,
+              REVOLUTIONS_PER_MINUTE,
               ]
 
     async_add_entities([FumisSensor(fumis, sensor, name) for sensor in sensors], True)
