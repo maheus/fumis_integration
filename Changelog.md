@@ -3,6 +3,7 @@
 - add air pressure sensor
 - add rpm sensor
 - add stove status if stove is an hybrid stove
+- add debug info
 
 3.1.0
 ----

@@ -79,10 +79,10 @@ class Info:
             fuel_quantity = (float(fuel.get("quantity", "Unknown")) * 100)
 
         status_id = controller.get("status", -1)
-        status = STATUS_MAPPING.get(status_id, STATUS_UNKNOWN)
+        status = STATUS_MAPPING.get(status_id, f'{STATUS_UNKNOWN} {status_id}')
 
         state_id = controller.get("command", -1)
-        state = STATE_MAPPING.get(state_id, STATE_UNKNOWN)
+        state = STATE_MAPPING.get(state_id, f'{STATE_UNKNOWN} {state_id}')
 
         ecomode_id = ecoMode.get("ecoModeEnable", 0)
         if ecomode_id is None:
