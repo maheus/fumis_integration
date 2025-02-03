@@ -10,8 +10,12 @@ from homeassistant.const import (
     CONF_ICON,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_TYPE,
+    REVOLUTIONS_PER_MINUTE,
+    PRESSURE,
     UnitOfPower,
     UnitOfTemperature,
+    UnitOfPressure,
+    
 )
 
 from homeassistant.components.sensor import (
@@ -84,7 +88,7 @@ SENSOR_TYPES = {
         CONF_NAME: "Fan Speed",
         CONF_TYPE: REVOLUTIONS_PER_MINUTE,
         CONF_DEVICE_CLASS: SensorDeviceClass.SPEED,
-        CONF_UNIT_OF_MEASUREMENT: None,
+        CONF_UNIT_OF_MEASUREMENT: REVOLUTIONS_PER_MINUTE,
     },
 }
 
