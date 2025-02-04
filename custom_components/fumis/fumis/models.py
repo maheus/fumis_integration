@@ -58,7 +58,10 @@ class Info:
         pressure = [d for d in variables if d['id'] == 34][0]
         rpm = [d for d in variables if d['id'] == 35][0]
         hybrid = controller.get("hybrid", {})
-        temperature = [d for d in temperatures if d['id'] == 1][0]
+        try:
+            temperature = [d for d in temperatures if (d['onMainScreen'] == True and  d['actualType'] > 0)][0]
+        except IndexError:
+            temperature = 0
         combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
         fuels = controller.get("fuels", [])
         fuel = [d for d in fuels if d['id'] == 1][0]
