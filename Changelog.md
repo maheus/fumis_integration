@@ -1,4 +1,11 @@
+3.2.1
+----
+
+- get temperature more dynamically
+- add pre_combustion status
+
 3.2.0
+----
 
 - add air pressure sensor
 - add rpm sensor
