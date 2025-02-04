@@ -154,6 +154,7 @@ class FumisClimate(ClimateEntity):
         self._unit_version = self.info.unit_version
         self._state = self.info.state
         self._status = self.info.status
+        self._temperature_id = self.info.temperature_id
         self._temperature = self.info.temperature
         self._target_temperature = self.info.target_temperature
         self._ecomode_state = self.info.ecomode_state
@@ -234,7 +235,7 @@ class FumisClimate(ClimateEntity):
 
     async def async_set_temperature(self, **kwargs):
         """Set new target temperature."""
-        await self.fumis.set_target_temperature(kwargs.get(ATTR_TEMPERATURE))
+        await self.fumis.set_target_temperature(kwargs.get(ATTR_TEMPERATURE), self._temperature_id)
 
     async def async_turn_on(self):
         """Turn device on."""

@@ -41,6 +41,7 @@ class Info:
     actualpower: float
     pressure: int
     rpm: int
+    temperature_id: int
 
 
     @staticmethod
@@ -111,6 +112,7 @@ class Info:
             status=status,
             kw=float(power.get("actualPower", 0)),
             actualpower=float(power.get("kw", 0)),
+            temperature_id=temperature.get("id", 0),
             target_temperature=temperature.get("set", 0),
             temperature=temperature.get("actual", 0),
             combustion_chamber_temperature=combustion_chamber_temperature.get("actual", 0),
