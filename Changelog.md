@@ -1,3 +1,22 @@
+3.2.1
+----
+
+- get temperature more dynamically
+- add pre_combustion status
+
+3.2.0
+----
+
+- add air pressure sensor
+- add rpm sensor
+- add stove status if stove is an hybrid stove
+- add debug info
+
+3.1.0
+----
+
+- add stove combustion chamber temperature
+
 3.0.2
 ----
 
