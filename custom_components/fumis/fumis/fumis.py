@@ -131,10 +131,10 @@ class Fumis:
         """Turn off Fumis WiRCU device."""
         await self._send_command({"command": 1, "type": 0})
 
-    async def set_target_temperature(self, temperature: float) -> None:
+    async def set_target_temperature(self, temperature: float, temperature_id: int) -> None:
         """Set target temperature of Fumis WiRCU device."""
         await self._send_command(
-            {"temperatures": [{"set": temperature, "id": 1}], "type": 0}
+            {"temperatures": [{"set": temperature, "id": temperature_id}], "type": 0}
         )
 
     async def set_mode(self, mode: int) -> None:

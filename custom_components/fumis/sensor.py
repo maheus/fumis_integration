@@ -10,8 +10,12 @@ from homeassistant.const import (
     CONF_ICON,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_TYPE,
+    REVOLUTIONS_PER_MINUTE,
+    PRESSURE,
     UnitOfPower,
-    UnitOfTemperature
+    UnitOfTemperature,
+    UnitOfPressure,
+    UnitOfTime,
 )
 
 from homeassistant.components.sensor import (
@@ -32,14 +36,22 @@ from .const import (
     ATTR_POWER,
     ATTR_FUEL,
     ATTR_ACTUAL_POWER,
+    ATTR_COMBUSTION_CHAMBER_TEMPERATURE,
+    ATTR_TIME_TO_SERVICE,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPES = {
     ATTR_TEMPERATURE: {
-        CONF_NAME: "Inside Temperature",
+        CONF_NAME: "Room Temperature",
         CONF_TYPE: ATTR_TEMPERATURE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
+        CONF_UNIT_OF_MEASUREMENT: UnitOfTemperature.CELSIUS,
+    },
+    ATTR_COMBUSTION_CHAMBER_TEMPERATURE: {
+        CONF_NAME: "Combustion chamber Temperature",
+        CONF_TYPE: ATTR_COMBUSTION_CHAMBER_TEMPERATURE,
         CONF_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
         CONF_UNIT_OF_MEASUREMENT: UnitOfTemperature.CELSIUS,
     },
@@ -67,6 +79,24 @@ SENSOR_TYPES = {
         CONF_DEVICE_CLASS: SensorDeviceClass.ENUM,
         CONF_UNIT_OF_MEASUREMENT: None,
     },
+    PRESSURE: {
+        CONF_NAME: "Pressure",
+        CONF_TYPE: PRESSURE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.PRESSURE,
+        CONF_UNIT_OF_MEASUREMENT: None,
+    },
+    REVOLUTIONS_PER_MINUTE: {
+        CONF_NAME: "Fan Speed",
+        CONF_TYPE: REVOLUTIONS_PER_MINUTE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.SPEED,
+        CONF_UNIT_OF_MEASUREMENT: REVOLUTIONS_PER_MINUTE,
+    },
+    ATTR_TIME_TO_SERVICE: {
+        CONF_NAME: "Time to service",
+        CONF_TYPE: ATTR_TIME_TO_SERVICE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.DURATION,
+        CONF_UNIT_OF_MEASUREMENT: UnitOfTime.HOURS,
+    },
 }
 
 async def async_setup_entry(
@@ -80,10 +110,14 @@ async def async_setup_entry(
 
     sensors = [
               ATTR_TEMPERATURE,
+              ATTR_COMBUSTION_CHAMBER_TEMPERATURE,
               ATTR_POWER,
               ATTR_ACTUAL_POWER,
               ATTR_FUEL,
               ATTR_STATE,
+              PRESSURE,
+              REVOLUTIONS_PER_MINUTE,
+              ATTR_TIME_TO_SERVICE,
               ]
 
     async_add_entities([FumisSensor(fumis, sensor, name) for sensor in sensors], True)

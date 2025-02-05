@@ -34,6 +34,9 @@ from .fumis.const import (
     STATUS_ECO,
     STATUS_COOLING,
     STATUS_UNKNOWN,
+    STATUS_WOODSTART1,
+    STATUS_WOODSTART2,
+    STATUS_WOODCOMBUSTION,
 )
 
 from .const import (
@@ -65,6 +68,9 @@ FUMIS_HVAC_TO_HA = {
     STATUS_PRE_HEATING: HVACMode.HEAT,
     STATUS_IGNITION: HVACMode.HEAT,
     STATUS_COMBUSTION: HVACMode.HEAT,
+    STATUS_WOODSTART1: HVACMode.HEAT,
+    STATUS_WOODSTART2: HVACMode.HEAT,
+    STATUS_WOODCOMBUSTION: HVACMode.HEAT,
     STATUS_ECO: HVACMode.HEAT,
     STATUS_COOLING: HVACMode.COOL,
     STATUS_UNKNOWN: HVACMode.OFF,
@@ -75,6 +81,9 @@ FUMIS_CURRENT_HVAC_TO_HA = {
     STATUS_PRE_HEATING: HVACAction.HEATING,
     STATUS_IGNITION: HVACAction.HEATING,
     STATUS_COMBUSTION: HVACAction.HEATING,
+    STATUS_WOODSTART1: HVACAction.HEATING,
+    STATUS_WOODSTART2: HVACAction.HEATING,
+    STATUS_WOODCOMBUSTION: HVACAction.HEATING,
     STATUS_ECO: HVACAction.HEATING,
     STATUS_COOLING: HVACAction.COOLING,
     STATUS_UNKNOWN: HVACAction.OFF,
@@ -145,6 +154,7 @@ class FumisClimate(ClimateEntity):
         self._unit_version = self.info.unit_version
         self._state = self.info.state
         self._status = self.info.status
+        self._temperature_id = self.info.temperature_id
         self._temperature = self.info.temperature
         self._target_temperature = self.info.target_temperature
         self._ecomode_state = self.info.ecomode_state
@@ -225,7 +235,7 @@ class FumisClimate(ClimateEntity):
 
     async def async_set_temperature(self, **kwargs):
         """Set new target temperature."""
-        await self.fumis.set_target_temperature(kwargs.get(ATTR_TEMPERATURE))
+        await self.fumis.set_target_temperature(kwargs.get(ATTR_TEMPERATURE), self._temperature_id)
 
     async def async_turn_on(self):
         """Turn device on."""

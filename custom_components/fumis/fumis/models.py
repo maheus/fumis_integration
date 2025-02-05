@@ -2,7 +2,7 @@
 
 import attr
 
-from .const import STATE_MAPPING, STATE_UNKNOWN, STATUS_MAPPING, STATUS_UNKNOWN, STOVE_ID, ECO_MAPPING
+from .const import STATE_MAPPING, STATE_UNKNOWN, STATUS_MAPPING, STATUS_UNKNOWN, ECO_MAPPING
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -25,7 +25,9 @@ class Info:
 
     temperature: float
     target_temperature: float
+    combustion_chamber_temperature: float
 
+    time_to_service: int
     heating_time: int
     igniter_starts: int
     misfires: int
@@ -38,6 +40,9 @@ class Info:
     timers: list
     kw: float
     actualpower: float
+    pressure: int
+    rpm: int
+    temperature_id: int
 
 
     @staticmethod
@@ -49,10 +54,19 @@ class Info:
         stats = controller.get("statistic", {})
         temperatures = controller.get("temperatures", {})
         power = controller.get("power", {})
-        #temperature = temperatures[0] if temperatures else {}
-        temperature = [d for d in temperatures if d['id'] == STOVE_ID][0]
+        diagnostic = controller.get("diagnostic", {})
+        parameters = diagnostic.get("parameters", {})
+        variables = diagnostic.get("variables", {})
+        rpm = [d for d in variables if d['id'] == 34][0]
+        pressure = [d for d in variables if d['id'] == 35][0]
+        hybrid = controller.get("hybrid", {})
+        try:
+            temperature = [d for d in temperatures if (d['onMainScreen'] == True and  d['actualType'] > 0)][0]
+        except IndexError:
+            temperature = 0
+        combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
         fuels = controller.get("fuels", [])
-        fuel = [d for d in fuels if d['id'] == STOVE_ID][0]
+        fuel = [d for d in fuels if d['id'] == 1][0]
         ecoMode = controller.get("ecoMode", {})
         timers = controller.get("timers", [])
 
@@ -70,10 +84,10 @@ class Info:
             fuel_quantity = (float(fuel.get("quantity", "Unknown")) * 100)
 
         status_id = controller.get("status", -1)
-        status = STATUS_MAPPING.get(status_id, STATUS_UNKNOWN)
+        status = STATUS_MAPPING.get(status_id, f'{STATUS_UNKNOWN} {status_id}')
 
         state_id = controller.get("command", -1)
-        state = STATE_MAPPING.get(state_id, STATE_UNKNOWN)
+        state = STATE_MAPPING.get(state_id, f'{STATE_UNKNOWN} {state_id}')
 
         ecomode_id = ecoMode.get("ecoModeEnable", 0)
         if ecomode_id is None:
@@ -86,6 +100,7 @@ class Info:
 
         return Info(
             controller_version=controller.get("version", "Unknown"),
+            time_to_service=int(controller.get("timeToService", 0)),
             heating_time=int(stats.get("heatingTime", 0)),
             igniter_starts=stats.get("igniterStarts", 0),
             ip=unit.get("ip", "Unknown"),
@@ -99,8 +114,10 @@ class Info:
             status=status,
             kw=float(power.get("actualPower", 0)),
             actualpower=float(power.get("kw", 0)),
+            temperature_id=temperature.get("id", 0),
             target_temperature=temperature.get("set", 0),
             temperature=temperature.get("actual", 0),
+            combustion_chamber_temperature=combustion_chamber_temperature.get("actual", 0),
             unit_id=unit.get("id", "Unknown"),
             unit_version=unit.get("version", "Unknown"),
             uptime=int(stats.get("uptime", 0)),
@@ -108,5 +125,7 @@ class Info:
             fuel_quantity=fuel_quantity,
             ecomode_type=int(ecomode_type),
             ecomode_state=ecomode_state,
+            pressure=pressure.get("value", 0),
+            rpm=rpm.get("value", 0),
             timers=timers,
         )
