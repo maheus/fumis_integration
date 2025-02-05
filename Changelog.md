@@ -1,3 +1,8 @@
+3.2.2
+----
+
+- add time to service sensor
+
 3.2.1
 ----
 
