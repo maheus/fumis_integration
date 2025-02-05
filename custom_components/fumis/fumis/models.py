@@ -27,6 +27,7 @@ class Info:
     target_temperature: float
     combustion_chamber_temperature: float
 
+    time_to_service: int
     heating_time: int
     igniter_starts: int
     misfires: int
@@ -99,6 +100,7 @@ class Info:
 
         return Info(
             controller_version=controller.get("version", "Unknown"),
+            time_to_service=int(controller.get("timeToService", 0)),
             heating_time=int(stats.get("heatingTime", 0)),
             igniter_starts=stats.get("igniterStarts", 0),
             ip=unit.get("ip", "Unknown"),

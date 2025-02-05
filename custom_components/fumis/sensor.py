@@ -15,7 +15,7 @@ from homeassistant.const import (
     UnitOfPower,
     UnitOfTemperature,
     UnitOfPressure,
-    
+    UnitOfTime,
 )
 
 from homeassistant.components.sensor import (
@@ -37,6 +37,7 @@ from .const import (
     ATTR_FUEL,
     ATTR_ACTUAL_POWER,
     ATTR_COMBUSTION_CHAMBER_TEMPERATURE,
+    ATTR_TIME_TO_SERVICE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -90,6 +91,12 @@ SENSOR_TYPES = {
         CONF_DEVICE_CLASS: SensorDeviceClass.SPEED,
         CONF_UNIT_OF_MEASUREMENT: REVOLUTIONS_PER_MINUTE,
     },
+    ATTR_TIME_TO_SERVICE: {
+        CONF_NAME: "Time to service",
+        CONF_TYPE: ATTR_TIME_TO_SERVICE,
+        CONF_DEVICE_CLASS: SensorDeviceClass.DURATION,
+        CONF_UNIT_OF_MEASUREMENT: UnitOfTime.HOURS,
+    },
 }
 
 async def async_setup_entry(
@@ -110,6 +117,7 @@ async def async_setup_entry(
               ATTR_STATE,
               PRESSURE,
               REVOLUTIONS_PER_MINUTE,
+              ATTR_TIME_TO_SERVICE,
               ]
 
     async_add_entities([FumisSensor(fumis, sensor, name) for sensor in sensors], True)
