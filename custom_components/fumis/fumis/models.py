@@ -56,8 +56,8 @@ class Info:
         diagnostic = controller.get("diagnostic", {})
         parameters = diagnostic.get("parameters", {})
         variables = diagnostic.get("variables", {})
-        pressure = [d for d in variables if d['id'] == 34][0]
-        rpm = [d for d in variables if d['id'] == 35][0]
+        rpm = [d for d in variables if d['id'] == 34][0]
+        pressure = [d for d in variables if d['id'] == 35][0]
         hybrid = controller.get("hybrid", {})
         try:
             temperature = [d for d in temperatures if (d['onMainScreen'] == True and  d['actualType'] > 0)][0]
