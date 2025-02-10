@@ -4,7 +4,6 @@ import socket
 from typing import Dict, Optional, Union
 
 import aiohttp
-import async_timeout
 from yarl import URL
 
 from .__version__ import __version__
@@ -61,7 +60,7 @@ class Fumis:
             self._close_session = True
 
         try:
-            with async_timeout.timeout(self.request_timeout):
+            async with asyncio.timeout(self.request_timeout):
                 response = await self._session.request(
                     method,
                     url,
