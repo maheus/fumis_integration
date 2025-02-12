@@ -1,9 +1,9 @@
 {
-  "title": "Fumis Integration ",
+  "title": "Fumis Integration",
   "config": {
     "step": {
       "user": {
-        "title": "Add your fumis stove ",
+        "title": "Add your fumis stove",
         "data": {
           "name": "[%key:common::config_flow::data::name%]",
           "mac": "[%key:common::config_flow::data::mac%]",

@@ -1,3 +1,8 @@
+3.2.4
+----
+
+- remove trailing spaces
+
 3.2.3
 ----
 
