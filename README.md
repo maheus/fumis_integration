@@ -2,11 +2,11 @@
 [![hacs_badge](https://github.com/maheus/fumis_integration/actions/workflows/hassfest.yaml/badge.svg)](https://github.com/maheus/fumis_integration/actions/)
 # Fumis integration for Home Assistant
 
-This a _custom component_ for [Home Assistant](https://www.home-assistant.io/).
+This is a _custom component_ for [Home Assistant](https://www.home-assistant.io/).
 
-This integration using modified lib [python-fumis](https://github.com/frenck/python-fumis).
+This integration using a modified lib [python-fumis](https://github.com/frenck/python-fumis).
 
-The Fumis integration allows you to control and get information the stoves who used the api fumis (https://api.fumis.si).
+The Fumis integration allows you to control and get stoves informations who use the api fumis (https://api.fumis.si).
 
 ### HACS
 
@@ -24,7 +24,7 @@ Adding integration with HA ui (configuration -> integrations -> add integration 
 ## known problems
 
 For one HETA green 200, if you deactivate the ecomode, then you must activate the possibility of accessing this menu.
-For reactivating this:
+For reactivate that:
 ```
 curl -d '{"unit": {"id": "YOUR_MAC", "type": 0, "pin": "YOUR_PASSWORD"},"controller": {"diagnostic": {"parameters": [{"id": 53, "value": 1}]}} ,"apiVersion": "1"}' -H  "Accept: application/json" -H 'appname: mtest' -H 'User-Agent: mtest' -H 'username: YOUR_MAC' -H 'password: YOUR_PASSWORD'  -X POST 'https://api.fumis.si/v1/status/'
 ```
