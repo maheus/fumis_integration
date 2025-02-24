@@ -70,7 +70,15 @@ class Info:
             temperature = [d for d in temperatures if (d['onMainScreen'] == True and d['actualType'] > 0)][0]
         except IndexError:
             temperature = {}
-        combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
+        try:
+            combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
+        except IndexError:
+            for d in variables:
+                if d['id'] == 11:
+                    combustion_chamber_temperature = {"actual", d['value']}
+                else:
+                    combustion_chamber_temperature = {}
+            combustion_chamber_temperature = [d for d in variables if d['id'] == 11][0]
         fuels = controller.get("fuels", [])
         fuel = [d for d in fuels if d['id'] == 1][0]
         ecoMode = controller.get("ecoMode", {})

@@ -1,3 +1,7 @@
+3.3.1
+----
+- fix combustion chamber sensor
+
 3.3.0
 ----
 
