@@ -57,13 +57,19 @@ class Info:
         diagnostic = controller.get("diagnostic", {})
         parameters = diagnostic.get("parameters", {})
         variables = diagnostic.get("variables", {})
-        rpm = [d for d in variables if d['id'] == 34][0]
-        pressure = [d for d in variables if d['id'] == 35][0]
+        try:
+            rpm = [d for d in variables if d['id'] == 34][0]
+        except IndexError:
+            rpm = {}
+        try:
+            pressure = [d for d in variables if d['id'] == 35][0]
+        except IndexError:
+            pressure = {}
         hybrid = controller.get("hybrid", {})
         try:
-            temperature = [d for d in temperatures if (d['onMainScreen'] == True and  d['actualType'] > 0)][0]
+            temperature = [d for d in temperatures if (d['onMainScreen'] == True and d['actualType'] > 0)][0]
         except IndexError:
-            temperature = 0
+            temperature = {}
         combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
         fuels = controller.get("fuels", [])
         fuel = [d for d in fuels if d['id'] == 1][0]
