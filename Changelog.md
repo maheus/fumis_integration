@@ -1,3 +1,9 @@
+3.3.0
+----
+
+- fix Sensor error
+- add idle state
+
 3.2.5
 ----
 
