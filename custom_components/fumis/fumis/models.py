@@ -67,7 +67,8 @@ class Info:
             pressure = {}
         hybrid = controller.get("hybrid", {})
         try:
-            temperature = [d for d in temperatures if (d['onMainScreen'] == True and d['actualType'] > 0)][0]
+            temperature = [d for d in temperatures
+                           if (d['onMainScreen'] is True and d['actualType'] > 0)][0]
         except IndexError:
             temperature = {}
         try:
@@ -81,7 +82,7 @@ class Info:
             combustion_chamber_temperature = [d for d in variables if d['id'] == 11][0]
         fuels = controller.get("fuels", [])
         fuel = [d for d in fuels if d['id'] == 1][0]
-        ecoMode = controller.get("ecoMode", {})
+        ecomode = controller.get("ecoMode", {})
         timers = controller.get("timers", [])
 
         rssi = int(unit.get("rssi", -100))
@@ -92,10 +93,10 @@ class Info:
         else:
             signal_strength = 2 * (rssi + 100)
 
-        if fuel.get("quantity", "Unknown") == None:
-            fuel_quantity = (float(0))
+        if fuel.get("quantity", "Unknown") is None:
+            fuel_quantity = float(0)
         else:
-            fuel_quantity = (float(fuel.get("quantity", "Unknown")) * 100)
+            fuel_quantity = float(fuel.get("quantity", "Unknown")) * 100
 
         status_id = controller.get("status", -1)
         status = STATUS_MAPPING.get(status_id, f'{STATUS_UNKNOWN} {status_id}')
@@ -103,12 +104,12 @@ class Info:
         state_id = controller.get("command", -1)
         state = STATE_MAPPING.get(state_id, f'{STATE_UNKNOWN} {state_id}')
 
-        ecomode_id = ecoMode.get("ecoModeEnable", 0)
+        ecomode_id = ecomode.get("ecoModeEnable", 0)
         if ecomode_id is None:
             ecomode_id = 0
         ecomode_state = ECO_MAPPING.get(ecomode_id, STATE_UNKNOWN)
 
-        ecomode_type = ecoMode.get("ecoModeSetType", -1)
+        ecomode_type = ecomode.get("ecoModeSetType", -1)
         if ecomode_type is None:
             ecomode_type = -1
 
@@ -126,8 +127,8 @@ class Info:
             state=state,
             status_id=status_id,
             status=status,
-            kw=float(power.get("actualPower", 0)),
-            actualpower=float(power.get("kw", 0)),
+            actualpower=int(power.get("actualPower", 0)),
+            kw=float(power.get("kw", 0)),
             temperature_id=temperature.get("id", 0),
             target_temperature=temperature.get("set", 0),
             temperature=temperature.get("actual", 0),

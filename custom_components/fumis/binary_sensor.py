@@ -17,7 +17,6 @@ from homeassistant.core import HomeAssistant
 
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
-    BinarySensorEntity,
 )
 
 from .const import (
@@ -62,6 +61,7 @@ class FumisBinarySensor(Entity):
         self._sensor = SENSOR_TYPES[sensor]
         self.info = None
         self._unit_id = None
+        self._state = None
 
     @property
     def unique_id(self):
@@ -98,11 +98,13 @@ class FumisBinarySensor(Entity):
         self.info = await self.fumis.update_info()
         self._unit_id = self.info.unit_id
         self._state = getattr(self.info, self._sensor.get(CONF_TYPE))
-        _LOGGER.debug(f"Export sensor info for {self._name}. name: {self._sensor.get(CONF_NAME)} value: {self._state}")
+        _LOGGER.debug("""Export binary sensor info for %s.
+                      name: %s value: %s""",
+                     self._name, self._sensor.get(CONF_NAME), self._state)
 
     @property
     def device_info(self) -> DeviceInfo:
-        """Return device information for this sensor."""
+        """Return device information for this binary sensor."""
         return DeviceInfo(
             identifiers={
                 (DOMAIN, self._unit_id)

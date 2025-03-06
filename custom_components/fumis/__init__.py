@@ -74,10 +74,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     _LOGGER.info("set up fumis with ui")
     mac = entry.data[CONF_MAC]
     password = entry.data[CONF_PASSWORD]
-    if CONF_NAME in entry.data:
-        name = entry.data[CONF_NAME]
-    else:
-        name = entry.data[CONF_MAC]
+    # if CONF_NAME in entry.data:
+    #     name = entry.data[CONF_NAME]
+    # else:
+    #     name = entry.data[CONF_MAC]
     session = async_get_clientsession(hass)
 
     try:
@@ -90,8 +90,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     except FumisConnectionError:
         _LOGGER.error("Fumis update failed")
         return False
-
-    #await async_migrate_unique_id(hass, entry, fumis)
 
     hass.data.setdefault(DOMAIN, {}).update({entry.entry_id: fumis})
     await hass.config_entries.async_forward_entry_setups(entry, FUMIS_COMPONENTS)

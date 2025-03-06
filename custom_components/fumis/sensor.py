@@ -14,15 +14,11 @@ from homeassistant.const import (
     PRESSURE,
     UnitOfPower,
     UnitOfTemperature,
-    UnitOfPressure,
     UnitOfTime,
 )
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
-    SensorEntity,
-    SensorEntityDescription,
-    SensorStateClass,
 )
 
 from homeassistant.config_entries import ConfigEntry
@@ -65,7 +61,7 @@ SENSOR_TYPES = {
         CONF_NAME: "Actual Power",
         CONF_TYPE: ATTR_ACTUAL_POWER,
         CONF_DEVICE_CLASS: SensorDeviceClass.POWER,
-        CONF_UNIT_OF_MEASUREMENT: UnitOfPower.KILO_WATT,
+        CONF_UNIT_OF_MEASUREMENT: None,
     },
     ATTR_FUEL: {
         CONF_NAME: "Pellet Quantity",
@@ -173,7 +169,9 @@ class FumisSensor(Entity):
         self.info = await self.fumis.update_info()
         self._unit_id = self.info.unit_id
         self._state = getattr(self.info, self._sensor.get(CONF_TYPE))
-        _LOGGER.debug(f"Export sensor info for {self._name}. name: {self._sensor.get(CONF_NAME)} value: {self._state}")
+        _LOGGER.debug("""Export sensor info for %s.
+                          name: %s value: %s""",
+                      self._name, self._sensor.get(CONF_NAME), self._state)
 
     @property
     def device_info(self) -> DeviceInfo:
