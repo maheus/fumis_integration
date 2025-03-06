@@ -1,6 +1,6 @@
 4.0.0
 ----
-- chore!: Reverse value between sensor "Acual Power" and "Power" and remove unit for "Actual Power"
+- [!WARNING] Reverse value between sensor "Acual Power" and "Power" and remove unit for "Actual Power"
 - add more status for hybrid stove
 - lint
 
