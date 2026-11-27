@@ -66,11 +66,13 @@ class Info:
         except IndexError:
             pressure = {}
         hybrid = controller.get("hybrid", {})
-        try:
-            temperature = [d for d in temperatures
-                           if (d['onMainScreen'] is True and d['actualType'] > 0)][0]
-        except IndexError:
-            temperature = {}
+        # Some stoves report actualType 0 for the room sensor. Fall back to the
+        # main screen entry, then to id 1, instead of ending up with no sensor.
+        main = [d for d in temperatures if d.get('onMainScreen') is True]
+        temperature = next(
+            (d for d in main if (d.get('actualType') or 0) > 0),
+            main[0] if main else next((d for d in temperatures if d.get('id') == 1), {}),
+        )
         try:
             combustion_chamber_temperature = [d for d in temperatures if d['id'] == 7][0]
         except IndexError:
